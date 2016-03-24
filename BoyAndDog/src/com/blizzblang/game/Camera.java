@@ -36,12 +36,12 @@ private Vector3f Angle = new Vector3f(0,0,0);
         projectionMatrix.m23 = -1;
         projectionMatrix.m32 = -((2 * near_plane * far_plane) / frustum_length);
         projectionMatrix.m33 = 0;
-        float w = (float)OpenGL.Width/(float)OpenGL.Height;w*=w;
-        float h = (float)OpenGL.Height/(float)OpenGL.Width;h*=h;
-		float left=-w;
+        float w = (float)OpenGL.Width/2;
+        float h = (float)OpenGL.Height/2;
+		float left=0;
 		float right=w;
 		float top=h;
-		float bottom=-h;
+		float bottom=0;
 		
 		OrthoMatrix.m00 = 2/(right-left);
 		OrthoMatrix.m30 = -(right+left)/(right-left);
@@ -71,10 +71,10 @@ private Vector3f Angle = new Vector3f(0,0,0);
 	}
 	public void update()
 	{
+		if(!ortho)
+		{
 		float lmod=2f;
 		float mod=0.5f;
-		if(Main.KeyIn.getKeyDown(Keyboard.KEY_Q))ortho=true;
-		else ortho=false;
 		if(Main.KeyIn.getKeyDown(Keyboard.KEY_A))Angle.y -= 0.05*lmod;
 		if(Main.KeyIn.getKeyDown(Keyboard.KEY_D))Angle.y += 0.05*lmod;
 		if(Main.KeyIn.getKeyDown(Keyboard.KEY_W))Angle.x -= 0.05*lmod;
@@ -83,6 +83,7 @@ private Vector3f Angle = new Vector3f(0,0,0);
 		if(Main.KeyIn.getKeyDown(Keyboard.KEY_G))Pos[2] -= 0.01*mod;
 		if(Main.KeyIn.getKeyDown(Keyboard.KEY_F))Pos[0] += 0.01*mod;
 		if(Main.KeyIn.getKeyDown(Keyboard.KEY_H))Pos[0] -= 0.01*mod;
+		}
 	}
 	public Matrix4f getViewMatrix()
 	{
@@ -94,4 +95,5 @@ private Vector3f Angle = new Vector3f(0,0,0);
 
 		return viewMatrix;
 	}
+	public void setOrtho(boolean i) {ortho=i;}
 }

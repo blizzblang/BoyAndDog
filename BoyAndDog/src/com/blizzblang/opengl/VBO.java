@@ -27,12 +27,12 @@ public class VBO
   private int vboiId=0;
   private int TexId=0;
   private int indicesCount=0;
-  public VBO(Matrix4f i)
+  public VBO()
   {
   vaoId = GL30.glGenVertexArrays();
   vboId = GL15.glGenBuffers();
   vboiId = GL15.glGenBuffers();
-  shad = new EntityShader(i);
+  shad = new EntityShader();
   }
   public void addVertex(Vertex  i)
   {
@@ -40,6 +40,7 @@ public class VBO
   }
   public void finalize()
   {
+	  
    FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(Verts.size() * Vertex.elementCount);
         for (Vertex i : Verts) 
         {
@@ -102,5 +103,9 @@ public class VBO
 	}
 	public int getTexture() {
 		return TexId;
+	}
+	public void wipe() 
+	{
+		Verts.clear();
 	}
 }

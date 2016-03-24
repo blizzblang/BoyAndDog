@@ -9,23 +9,26 @@ import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
+import org.newdawn.slick.Color;
 
 import com.blizzblang.game.Entity;
 import com.blizzblang.game.Main;
 
-
-public class EntityShader extends Shader
+public class TextShader extends Shader
 {
-	private Matrix4f projection = Main.cam.getProjectionMatrix();
-	private Matrix4f view = Main.cam.getViewMatrix();
+	private Color c = new Color(0f,0f,0f);
     private int projectionMatrixLocation;
     private int viewMatrixLocation;
     private int modelMatrixLocation;  
+    private int ShaderColorLoc;
     private FloatBuffer matrix44Buffer = BufferUtils.createFloatBuffer(16);
-	public EntityShader() 
-	{
-		super("res/sdr/base/EntityShader.vert","res/sdr/base/EntityShader.frag");
+	public TextShader() {
+		super("res/sdr/text/TextShader.vert","res/sdr/text/TextShader.frag");
 		init();
+	}
+	public void setColor(float r,float g,float b)
+	{
+		c = new Color(r,g,b);
 	}
 	@Override
 	protected void init()
@@ -72,7 +75,9 @@ public class EntityShader extends Shader
 	        projectionMatrixLocation = GL20.glGetUniformLocation( ShaderId,"projectionMatrix");
 	        viewMatrixLocation = GL20.glGetUniformLocation( ShaderId, "viewMatrix");
 	        modelMatrixLocation = GL20.glGetUniformLocation( ShaderId, "modelMatrix");
+	        ShaderColorLoc = GL20.glGetUniformLocation(ShaderId, "Color");
 	}
+	@Override
 	public void Bind()
 	{
 		
@@ -97,7 +102,8 @@ public class EntityShader extends Shader
 	        GL20.glUniformMatrix4(viewMatrixLocation, false, matrix44Buffer);
 	        model.store(matrix44Buffer); matrix44Buffer.flip();
 	        
-	        GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);        
+	        GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);     
+	        GL20.glUniform3f(ShaderColorLoc, c.r,c.g,c.b);
 	}
 	@Override
 	public void unBind() 
@@ -105,7 +111,5 @@ public class EntityShader extends Shader
 		 ARBShaderObjects.glUseProgramObjectARB(0);
 		
 	}
-
-
 
 }
